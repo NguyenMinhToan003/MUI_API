@@ -1,5 +1,8 @@
-/**
- * Updated by trungquandev.com's author on August 17 2023
- * YouTube: https://youtube.com/@trungquandev
- * "A bit of fragrance clings to the hand that gives flowers!"
- */
+import 'dotenv/config'
+
+export const env = {
+  PORT: process.env.PORT || 3000,
+  MONGO_URI: process.env.MONGO_URI,
+  MONGO_NAME: process.env.MONGO_NAME
+}
+
