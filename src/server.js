@@ -1,18 +1,18 @@
 import express from 'express'
-import { CONNECT_DB, GET_DB, CLOSE_DB} from '~/config/mongodb'
+import { env } from '~/config/environment'
 import exitHook from 'async-exit-hook'
+import { CONNECT_DB, CLOSE_DB } from '~/config/mongodb'
+import { APIs_V1 } from '~/routes/v1'
+
+
 const START_SERVER = async () => {
   const app = express()
   const hostname = 'localhost'
-  const port = 8017
-  app.get('/', async (req, res) => {
-    // eslint-disable-next-line no-console
-    console.log(await GET_DB().listCollections().toArray())
-    res.send('<h1>Hello word</h1>')
-  })
-  app.listen(port, hostname, () => {
+  app.use(express.json())
+  app.use('/v1', APIs_V1)
+  app.listen(env.PORT, hostname, () => {
   // eslint-disable-next-line no-console
-    console.log(`Server running http://${ hostname }:${ port }/`)
+    console.log(`Server running http://${ hostname }:${ env.PORT }/`)
   })
   exitHook(() => {
     CLOSE_DB()
@@ -20,8 +20,6 @@ const START_SERVER = async () => {
     console.log('Server stopped!!!')
   })
 }
-
-
 // cach 1 ket noi database immediately-invoked function expression (IIFE)
 (async() => {
   try {
@@ -37,7 +35,6 @@ const START_SERVER = async () => {
     process.exit(0)
   }
 })()
-
 
 //// cach 2 ket noi database thenable
 // console.log('1. connecting to database...')
