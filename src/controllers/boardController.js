@@ -1,12 +1,14 @@
-
 import { StatusCodes } from 'http-status-codes'
-const createNew = async (req, res) => {
+import ApiError from '~/utils/ApiError'
+const createNew = async (req, res, next) => {
   try {
+    //eslint-disable-next-line
     console.log('req.body', req.body)
-    res.status(StatusCodes.OK).json({ message: 'Validation is successful' })
+    // res.status(StatusCodes.OK).json({ message: 'Validation is successful' })
+    throw new ApiError(StatusCodes.CONFLICT, 'Error Test from Toan Nguyen')
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ errors: error.message
-    })
+    next(error)
+
   }
 }
 
