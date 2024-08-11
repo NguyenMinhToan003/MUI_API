@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { StatusCodes } from 'http-status-codes'
+import ApiError from '~/utils/ApiError'
 const createNew = async ( req, res, next ) => {
   const schema = Joi.object({
     name: Joi.string().required().max(50).min(3).trim().strict(),
@@ -10,7 +11,8 @@ const createNew = async ( req, res, next ) => {
     await schema.validateAsync(req.body, { abortEarly: false })
     next()
   } catch ( error) {
-    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ errors: new Error(error).message })
+    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message)
+    next(customError)
   }
 }
 export const dashBoardValidation = {
