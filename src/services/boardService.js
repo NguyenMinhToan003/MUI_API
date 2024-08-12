@@ -14,4 +14,12 @@ const newBoard = async (board) => {
     throw error
   }
 }
-export const boardService = { newBoard }
+const getDetail = async (id) => {
+  try {
+    const board = await boardModel.getDetail(id)
+    return board
+  } catch (error) {
+    throw error
+  }
+}
+export const boardService = { newBoard, getDetail }

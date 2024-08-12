@@ -8,4 +8,6 @@ const Router = express.Router()
 Router.route('/')
   .get((req, res ) => res.status(StatusCodes.OK).json({ message: 'Get all board' }))
   .post(dashBoardValidation.createNew, boardController.createNew)
+Router.route('/:id')
+  .get(boardController.getDetail)
 export const BoardRoute = Router
