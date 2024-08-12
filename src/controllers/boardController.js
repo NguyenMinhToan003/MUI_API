@@ -1,13 +1,13 @@
 import { StatusCodes } from 'http-status-codes'
 import ApiError from '~/utils/ApiError'
+import { boardService } from '~/services/boardService'
 const createNew = async (req, res, next) => {
   try {
-    //eslint-disable-next-line
-    console.log('req.body', req.body)
-    // res.status(StatusCodes.OK).json({ message: 'Validation is successful' })
-    throw new ApiError(StatusCodes.CONFLICT, 'Error Test from Toan Nguyen')
+    const newBoarded = await boardService.newBoard(req.body)
+    res.status(StatusCodes.OK).json(newBoarded)
   } catch (error) {
-    next(error)
+    const customError = new ApiError(error)
+    next(customError)
 
   }
 }
