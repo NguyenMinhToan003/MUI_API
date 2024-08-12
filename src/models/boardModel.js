@@ -1,7 +1,9 @@
 /* eslint-disable no-useless-catch */
+import { StatusCodes } from 'http-status-codes'
 import Joi from 'joi'
 import { ObjectId } from 'mongodb'
 import { GET_DB } from '~/config/mongodb'
+import ApiError from '~/utils/ApiError'
 import { OBJECT_ID_REGEX, OBJECT_ID_MESSAGE } from '~/utils/validation'
 const BOARD_COLELCTION_NAME = 'boards'
 const BOARD_SCHEMA = Joi.object({
@@ -29,9 +31,20 @@ const createNew = async (data) => {
 const findOneById= async (id) => {
   try {
     // neu id la string phai chuyen ve dang new ObjectId khong thi ket qua la null
-    return await GET_DB().collection(BOARD_COLELCTION_NAME).findOne({ _id:new ObjectId(id) })
+    return await GET_DB().collection(BOARD_COLELCTION_NAME).findOne({ _id: new ObjectId(id) })
   } catch (error) {
     throw error
   }
 }
-export const boardModel = { BOARD_COLELCTION_NAME, BOARD_SCHEMA, createNew, findOneById }
+const getDetail = async (id) => {
+  try {
+    const board = await findOneById(id)
+    if (!board) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found')
+    }
+    return board
+  } catch (error) {
+    throw error
+  }
+}
+export const boardModel = { BOARD_COLELCTION_NAME, BOARD_SCHEMA, createNew, findOneById, getDetail }
