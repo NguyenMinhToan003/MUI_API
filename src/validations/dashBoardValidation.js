@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import ApiError from '~/utils/ApiError'
 const createNew = async ( req, res, next ) => {
   const schema = Joi.object({
-    name: Joi.string().required().max(50).min(3).trim().strict(),
+    title: Joi.string().required().max(50).min(3).trim().strict(),
     description: Joi.string().required().max(50).min(3).trim().strict()
   })
   try {
