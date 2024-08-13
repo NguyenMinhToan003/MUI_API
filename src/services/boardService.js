@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { slugify } from '~/utils/fomater'
 import { boardModel } from '~/models/boardModel'
+import { cloneDeep } from 'lodash'
 const newBoard = async (board) => {
   try {
     const newBoard= {
@@ -17,7 +18,13 @@ const newBoard = async (board) => {
 const getDetail = async (id) => {
   try {
     const board = await boardModel.getDetail(id)
-    return board
+    const resBoard = cloneDeep(board)
+    resBoard.columns.forEach(column => {
+      column.cards = resBoard.cards.filter(card => card.columnId.toString() === column._id.toString())
+    })
+    console.log(resBoard)
+    delete resBoard.cards
+    return resBoard
   } catch (error) {
     throw error
   }
