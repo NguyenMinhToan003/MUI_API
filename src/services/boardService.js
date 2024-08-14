@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-catch */
 import { slugify } from '~/utils/fomater'
 import { boardModel } from '~/models/boardModel'
 import { cloneDeep } from 'lodash'
@@ -22,7 +21,6 @@ const getDetail = async (id) => {
     resBoard.columns.forEach(column => {
       column.cards = resBoard.cards.filter(card => card.columnId.toString() === column._id.toString())
     })
-    console.log(resBoard)
     delete resBoard.cards
     return resBoard
   } catch (error) {

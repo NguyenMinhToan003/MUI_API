@@ -20,7 +20,11 @@ const validationData =async (data) => {
 const createNew = async (data) => {
   try {
     const validData = await validationData(data)
-    return await GET_DB().collection(COLUMN_COLLECTION_NAME).insertOne(validData)
+    const reqData={
+      ...validData,
+      boardId: new ObjectId(validData.boardId)
+    }
+    return await GET_DB().collection(COLUMN_COLLECTION_NAME).insertOne(reqData)
   } catch (error) {
     throw error
   }
@@ -33,4 +37,22 @@ const findOneById= async (id) => {
     throw error
   }
 }
-export const columnModel = { COLUMN_COLLECTION_NAME, COLUMN_SCHEMA, createNew, findOneById }
+const pushCardOrderIds= async(card) => {
+  try {
+    const result = await GET_DB().collection(COLUMN_COLLECTION_NAME).findOneAndUpdate(
+      { _id:new ObjectId(card.columnId), _destroy:false },
+      { $push:{ cardOrderIds: new ObjectId(card._id) } },
+      { returnDocument:'after' }
+    )
+    return result.value
+  } catch ( error) {
+    throw error
+  }
+}
+export const columnModel = {
+  COLUMN_COLLECTION_NAME,
+  COLUMN_SCHEMA,
+  createNew,
+  findOneById,
+  pushCardOrderIds
+}

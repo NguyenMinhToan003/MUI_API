@@ -21,7 +21,12 @@ const validationData =async (data) => {
 const createNew = async (data) => {
   try {
     const validData = await validationData(data)
-    return await GET_DB().collection(CARD_COLLECTION_NAME).insertOne(validData)
+    const reqData= {
+      ...validData,
+      boardId: new ObjectId(validData.boardId),
+      columnId: new ObjectId(validData.columnId)
+    }
+    return await GET_DB().collection(CARD_COLLECTION_NAME).insertOne(reqData)
   } catch (error) {
     throw error
   }
@@ -35,4 +40,9 @@ const findOneById= async (id) => {
   }
 }
 
-export const cardModel = { CARD_COLLECTION_NAME, CARD_SCHEMA, createNew, findOneById }
+export const cardModel = {
+  CARD_COLLECTION_NAME,
+  CARD_SCHEMA,
+  createNew,
+  findOneById
+}
