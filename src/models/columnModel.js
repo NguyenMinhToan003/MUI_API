@@ -1,4 +1,6 @@
 import Joi from 'joi'
+import { ObjectId } from 'mongodb'
+import { GET_DB } from '~/config/mongodb'
 import { OBJECT_ID_REGEX, OBJECT_ID_MESSAGE } from '~/utils/validation'
 
 const COLUMN_COLLECTION_NAME = 'columns'
@@ -11,4 +13,24 @@ const COLUMN_SCHEMA = Joi.object({
   updatedAt:Joi.date().timestamp().default(Date.now()),
   _destroy: Joi.boolean().default(false)
 })
-export const columnModel = { COLUMN_COLLECTION_NAME, COLUMN_SCHEMA }
+const validationData =async (data) => {
+  return await COLUMN_SCHEMA.validateAsync(data)
+}
+
+const createNew = async (data) => {
+  try {
+    const validData = await validationData(data)
+    return await GET_DB().collection(COLUMN_COLLECTION_NAME).insertOne(validData)
+  } catch (error) {
+    throw error
+  }
+}
+const findOneById= async (id) => {
+  try {
+    // neu id la string phai chuyen ve dang new ObjectId khong thi ket qua la null
+    return await GET_DB().collection(COLUMN_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
+  } catch (error) {
+    throw error
+  }
+}
+export const columnModel = { COLUMN_COLLECTION_NAME, COLUMN_SCHEMA, createNew, findOneById }

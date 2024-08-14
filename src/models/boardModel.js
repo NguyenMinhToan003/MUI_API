@@ -57,7 +57,7 @@ const getDetail = async (id) => {
     if (!board) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found')
     }
-    return board[0] || {}
+    return board[0] || null
   } catch (error) {
     throw error
   }
