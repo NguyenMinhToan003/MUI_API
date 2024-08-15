@@ -16,6 +16,21 @@ const createNew = async ( req, res, next ) => {
     next(customError)
   }
 }
+const update = async ( req, res, next ) => {
+  const schema = Joi.object({
+    title: Joi.string().max(50).min(3).trim().strict(),
+    cardOrderIds:Joi.array().items(Joi.string().pattern(OBJECT_ID_REGEX).message(OBJECT_ID_MESSAGE)).default([])
+  })
+  try {
+    // abortEarly: false de hien thi tat ca loi
+    await schema.validateAsync(req.body, { abortEarly: false, allowUnknown: true })
+    next()
+  } catch ( error) {
+    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message)
+    next(customError)
+  }
+}
 export const columnValidation = {
-  createNew
+  createNew,
+  update
 }
