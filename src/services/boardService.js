@@ -1,6 +1,7 @@
 import { slugify } from '~/utils/fomater'
 import { boardModel } from '~/models/boardModel'
 import { cloneDeep } from 'lodash'
+import { ObjectId } from 'mongodb'
 const newBoard = async (board) => {
   try {
     const newBoard= {
@@ -27,4 +28,16 @@ const getDetail = async (id) => {
     throw error
   }
 }
-export const boardService = { newBoard, getDetail }
+const update = async (id, reqBody) => {
+  try {
+    const dataUpdate = {
+      ...reqBody,
+      updatedAt: Date.now()
+    }
+    const updatedBoard = await boardModel.update(id, dataUpdate)
+    return updatedBoard
+  } catch (error) {
+    throw error
+  }
+}
+export const boardService = { newBoard, getDetail, update }
