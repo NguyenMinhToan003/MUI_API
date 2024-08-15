@@ -11,7 +11,17 @@ const createNew = async (req, res, next) => {
 
   }
 }
-
+const update = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const updatecolumn = await columnService.update(id, req.body)
+    res.status(StatusCodes.OK).json(updatecolumn)
+  } catch (error) {
+    const customError = new ApiError(error)
+    next(customError)
+  }
+}
 export const columnController = {
-  createNew
+  createNew,
+  update
 }
