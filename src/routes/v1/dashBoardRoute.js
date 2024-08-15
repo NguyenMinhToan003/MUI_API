@@ -10,4 +10,5 @@ Router.route('/')
   .post(dashBoardValidation.createNew, boardController.createNew)
 Router.route('/:id')
   .get(boardController.getDetail)
+  .put(dashBoardValidation.update, boardController.update)
 export const BoardRoute = Router
