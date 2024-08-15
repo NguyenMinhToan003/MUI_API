@@ -82,6 +82,9 @@ const update= async(id, dataUpdate) => {
         delete dataUpdate[key]
       }
     })
+    if (dataUpdate.columnOrderIds) {
+      dataUpdate.columnOrderIds = dataUpdate.columnOrderIds.map(id => new ObjectId(id))
+    }
     const result = await GET_DB().collection(BOARD_COLELCTION_NAME).findOneAndUpdate(
       { _id:new ObjectId(id) },
       { $set: dataUpdate },
