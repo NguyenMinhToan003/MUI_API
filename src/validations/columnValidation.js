@@ -30,7 +30,20 @@ const update = async ( req, res, next ) => {
     next(customError)
   }
 }
+const deleteColumn = async ( req, res, next ) => {
+  const schema = Joi.object({
+    id: Joi.string().required().pattern(OBJECT_ID_REGEX).message(OBJECT_ID_MESSAGE)
+  })
+  try {
+    await schema.validateAsync(req.params)
+    next()
+  } catch ( error) {
+    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message)
+    next(customError)
+  }
+}
 export const columnValidation = {
   createNew,
-  update
+  update,
+  deleteColumn
 }
