@@ -2,6 +2,8 @@ import { slugify } from '~/utils/fomater'
 import { boardModel } from '~/models/boardModel'
 import { cloneDeep } from 'lodash'
 import { ObjectId } from 'mongodb'
+import { columnModel } from '~/models/columnModel'
+import { cardModel } from '~/models/cardModel'
 const newBoard = async (board) => {
   try {
     const newBoard= {
@@ -40,4 +42,23 @@ const update = async (id, reqBody) => {
     throw error
   }
 }
-export const boardService = { newBoard, getDetail, update }
+const moveCardDifferentColumns = async (reqBody) => {
+  try {
+    await columnModel.update(reqBody.prevColumnId, {
+      cardOrderIds: reqBody.prevCardOrderIds,
+      updatedAt: Date.now()
+    })
+    await columnModel.update(reqBody.nextColumnId, {
+      cardOrderIds: reqBody.nextCardOrderIds,
+      updatedAt: Date.now()
+    })
+    await cardModel.update(reqBody.cardId, {
+      columnId: new ObjectId(reqBody.nextColumnId),
+      updatedAt: Date.now()
+    })
+    return { message: 'Move card success' }
+  } catch (error) {
+    throw error
+  }
+}
+export const boardService = { newBoard, getDetail, update, moveCardDifferentColumns }
