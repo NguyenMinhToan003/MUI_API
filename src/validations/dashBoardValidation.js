@@ -31,7 +31,25 @@ const update = async ( req, res, next ) => {
     next(customError)
   }
 }
+const moveCardDifferentColumns = async ( req, res, next ) => {
+  const schema = Joi.object({
+    cardId: Joi.string().pattern(OBJECT_ID_REGEX).message(OBJECT_ID_MESSAGE).required(),
+    prevColumnId: Joi.string().pattern(OBJECT_ID_REGEX).message(OBJECT_ID_MESSAGE).required(),
+    prevCardOrderIds:Joi.array().required().items(Joi.string().pattern(OBJECT_ID_REGEX).message(OBJECT_ID_MESSAGE)).default([]),
+    nextColumnId: Joi.string().pattern(OBJECT_ID_REGEX).message(OBJECT_ID_MESSAGE).required(),
+    nextCardOrderIds:Joi.array().required().items(Joi.string().pattern(OBJECT_ID_REGEX).message(OBJECT_ID_MESSAGE)).default([])
+  })
+  try {
+    // abortEarly: false de hien thi tat ca loi
+    await schema.validateAsync(req.body, { abortEarly: false })
+    next()
+  } catch ( error) {
+    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message)
+    next(customError)
+  }
+}
 export const dashBoardValidation = {
   createNew,
-  update
+  update,
+  moveCardDifferentColumns
 }
