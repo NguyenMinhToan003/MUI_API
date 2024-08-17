@@ -8,14 +8,15 @@ import cors from 'cors'
 import { corsOptions } from '~/config/cors'
 const START_SERVER = async () => {
   const app = express()
+  const port = env.PORT || 4000;
   const hostname = 'localhost'
   app.use(cors(corsOptions))
   app.use(express.json())
   app.use('/v1', APIs_V1)
   app.use(errorHandlingMiddleware)
-  app.listen(env.PORT, hostname, () => {
+  app.listen(port, hostname, () => {
   // eslint-disable-next-line no-console
-    console.log(`Server running http://${ hostname }:${ env.PORT }/`)
+    console.log(`Server running http://${ hostname }:${ port }/`)
   })
   exitHook(() => {
     CLOSE_DB()
