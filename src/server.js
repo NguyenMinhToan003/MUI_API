@@ -8,9 +8,9 @@ import cors from 'cors'
 import { corsOptions } from '~/config/cors'
 const START_SERVER = async () => {
   const app = express()
+  app.use(cors(corsOptions))
   const port = env.PORT || 4000
   const hostname = 'localhost'
-  app.use(cors(corsOptions))
   app.use(express.json())
   app.use('/v1', APIs_V1)
   app.use(errorHandlingMiddleware)
