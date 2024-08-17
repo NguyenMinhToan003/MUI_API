@@ -20,10 +20,12 @@ const START_SERVER = async () => {
       console.log(`Server running Production ${ process.env.PORT }/`)
     })
   }
-  app.listen(port, hostname, () => {
-  // eslint-disable-next-line no-console
-    console.log(`Server running Local Dev http://${ hostname }:${ port }/`)
-  })
+  else {
+    app.listen(port, hostname, () => {
+    // eslint-disable-next-line no-console
+      console.log(`Server running Local Dev http://${ hostname }:${ port }/`)
+    })
+  }
   exitHook(() => {
     CLOSE_DB()
     // eslint-disable-next-line no-console
